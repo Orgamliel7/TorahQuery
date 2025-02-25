@@ -16,15 +16,48 @@ import java.util.stream.Collectors;
 @Service
 public class SearchService {
 
+    @Autowired
+    private LuceneService luceneService;
+
+    @Autowired
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
-    
+
     @Autowired
     public SearchService(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
     }
-    
+
+    // פונקציית חיפוש שמשתמשת ב-Lucene
+    public SearchResult searchWithLucene(String query) {
+        try {
+            // ביצוע חיפוש באמצעות Lucene
+            List<LuceneService.SearchResult> luceneResults = luceneService.search(query, 10);
+            
+            List<SearchResult.AnswerResult> results = new ArrayList<>();
+            
+            for (LuceneService.SearchResult lr : luceneResults) {
+                // שליפת התשובות הקשורות
+                List<Answer> answers = answerRepository.findByIdIn(lr.getAnswerIds());
+                
+                for (Answer answer : answers) {
+                    // יצירת תוצאה עם הציון מ-Lucene
+                    results.add(new SearchResult.AnswerResult(answer, lr.getScore(), lr.getQuestionText()));
+                }
+            }
+            
+            // מיון לפי ציון רלוונטיות
+            results.sort((r1, r2) -> Double.compare(r2.getMatchScore(), r1.getMatchScore()));
+            
+            return new SearchResult(query, results);
+        } catch (Exception e) {
+            // במקרה של שגיאה, נחזור לשיטת החיפוש הישנה
+            System.err.println("Lucene search error: " + e.getMessage());
+            return search(query);
+        }
+    }
+
     public SearchResult search(String query) {
         // בשלב ראשוני, פשוט נחפש לפי מילות מפתח בסיסיות
         List<String> keywords = extractKeywords(query);

@@ -20,7 +20,7 @@ public class SearchController {
     
     @GetMapping
     public ResponseEntity<SearchResult> search(@RequestParam String query) {
-        SearchResult results = searchService.search(query);
+        SearchResult results = searchService.searchWithLucene(query);
         return ResponseEntity.ok(results);
     }
 }
