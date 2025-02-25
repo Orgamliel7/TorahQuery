@@ -7,6 +7,7 @@ import com.torahsearch.repository.AnswerRepository;
 import com.torahsearch.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.torahsearch.search.LuceneService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
