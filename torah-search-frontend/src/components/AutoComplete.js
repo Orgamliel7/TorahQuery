@@ -64,9 +64,6 @@ const AutoComplete = ({ suggestions, onSelect, placeholder }) => {
           placeholder={placeholder || "הקלד לחיפוש..."}
           className="autocomplete-input"
         />
-        <button type="submit" className="autocomplete-submit">
-          חפש
-        </button>
         <button type="button" onClick={handleClear} className="autocomplete-clear">
           ✖
         </button>

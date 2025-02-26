@@ -36,3 +36,6 @@ build/
 .env
 
 
+# pwd
+pwd.json
+backend/application-mongo.properties
