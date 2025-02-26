@@ -2,9 +2,16 @@ import React, { useState } from 'react';
 import './SearchBar.css';
 import AutoComplete from './AutoComplete';
 
-
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
+
+  // Static suggestions array
+  const suggestions = [
+    'שאלה 1',
+    'שאלה 2',
+    'שאלה 3',
+    // Add more suggestions here
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,7 +29,7 @@ const SearchBar = ({ onSearch }) => {
     <div className="search-bar">
       <form onSubmit={handleSubmit}>
         <AutoComplete
-          suggestions={suggestions}
+          suggestions={suggestions} // passing suggestions as a prop
           onSelect={handleSearch}
           placeholder="הקלד שאלה תורנית..."
         />
